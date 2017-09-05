@@ -1,0 +1,22 @@
+ctx.beginPath();
+ctx.rect(20,40,50,50); //last two are width and height and first two are coordinate of top left corner of canvas
+ctx.fillStyle="#FF0000"; //store colour
+ctx.fill(); //fill the rectangle with red colour
+ctx.closePath(); /*between this we draw the stuff*/
+
+ctx.beginPath();
+ctx.arc(240,160,50,0,Math.PI*2,false); 
+/* first two are x and y coordinate then radius 
+then we have start angle and end angle and they are in 
+radian (Math.PI*2 = 6.28 radian is 360 degree
+false is clockwise direction to draw circle
+*/
+ctx.fillStyle="yellow";
+ctx.fill(); 
+ctx.closePath();
+
+ctx.beginPath();
+ctx.rect(160,10,100,40);
+ctx.strokeStyle='rgba(0,0,255,0.5)';
+ctx.stroke();
+ctx.closePath();
