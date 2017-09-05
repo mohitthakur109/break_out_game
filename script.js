@@ -23,6 +23,7 @@ var brickOffSetTop=30;
 var brickOffSetLeft=30;
 var score=0;
 var lives=3;
+var audio;
 var bricks=[]; //empty array
 
 for(c=0;c<brickColumnCount;c++){
@@ -99,8 +100,11 @@ function collisionDetection(){
 				if(x>b.x&&x<b.x+brickWidth&&y>b.y&&y<b.y+brickHeight){
 					dy=-dy;
 					b.status=0;
+					var brickSound = new Audio('brick.mp3');
+                    brickSound.play();
 					score++;
 					if(score==(brickColumnCount*brickRowCount)){
+					    audio.pause();
 						alert("You Win ,CONGRATULATION !");
 						document.location.reload();
 					}
@@ -181,6 +185,15 @@ function mouseMoveHandler(e){
 	}
 }
 draw();
+
+function startGame() {
+    
+   audio = new Audio('audio_file.wav');
+   audio.play();
+   audio.loop=true;
+}
+
+
 //setInterval(draw,10);
 /* first parameter function to be executed 
 second parameter indicate milliseconds before
