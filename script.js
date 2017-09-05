@@ -10,12 +10,12 @@ var dx=2;
 var dy=-2;
 var ballRadius=10;
 var paddleHeight=10;
-var paddleWidth=75;
+var paddleWidth=100;
 var paddleX=(canvas.width-paddleWidth)/2;
 var rightPressed=false;
 var leftPressed=false;
-var brickRowCount=3;
-var brickColumnCount=5;
+var brickRowCount=8;
+var brickColumnCount=7;
 var brickWidth=75;
 var brickHeight=20;
 var brickPadding=10;
@@ -24,7 +24,10 @@ var brickOffSetLeft=30;
 var score=0;
 var lives=3;
 var audio;
+var ChangeBallColor=0;
 var bricks=[]; //empty array
+var colorArray=["#626567","#F1C40F","#06FAF3","#D35400","#4BCBA6","#F9E79F","#AEB6BF"];
+var colorArrayBall=["#02FE11","#999B10","#8A00FE","#CCD50E","#F76293","#02FE11","#999B10"];
 
 for(c=0;c<brickColumnCount;c++){
 	bricks[c]=[]; // array inside array
@@ -38,12 +41,6 @@ document.addEventListener("keyup",keyUpHandler); // call function when key relea
 
 function drawBricks(){
 	for(c=0;c<brickColumnCount;c++){
-	    var color;
-		if(c==0)color="#626567";
-		else if(c==1)color="#F1C40F";
-		else if(c==2)color="#06FAF3"; 
-		else if(c==3) color="#D35400";
-		else color="#4BCBA6";
 		for(r=0;r<brickRowCount;r++){
 			if(bricks[c][r].status==1){
 				var brickX=(c*(brickWidth+brickPadding)+brickOffSetLeft);
@@ -52,7 +49,7 @@ function drawBricks(){
 				bricks[c][r].y=brickY;
 				ctx.beginPath();
 				ctx.rect(brickX,brickY,brickWidth,brickHeight); 
-				ctx.fillStyle=color;
+				ctx.fillStyle=colorArray[c];
 				ctx.fill(); 
 				ctx.closePath();
 				}
@@ -77,9 +74,10 @@ function keyUpHandler(e){
 
 }
 function drawBall(){
+   
 	ctx.beginPath();
 	ctx.arc(x,y,ballRadius,0,Math.PI*2); 
-	ctx.fillStyle="#2471A3";
+	ctx.fillStyle=colorArrayBall[ChangeBallColor];
 	ctx.fill(); 
 	ctx.closePath();
 }
@@ -97,8 +95,9 @@ function collisionDetection(){
 		for(r=0;r<brickRowCount;r++){
 		var b=bricks[c][r];
 		    if(b.status==1){
-				if(x>b.x&&x<b.x+brickWidth&&y>b.y&&y<b.y+brickHeight){
+				if(x>=b.x&&x<=b.x+brickWidth&&y>=b.y&&y<=b.y+brickHeight){
 					dy=-dy;
+					ChangeBallColor=(ChangeBallColor+1)%brickColumnCount;
 					b.status=0;
 					var brickSound = new Audio('brick.mp3');
                     brickSound.play();
@@ -108,6 +107,7 @@ function collisionDetection(){
 						alert("You Win ,CONGRATULATION !");
 						document.location.reload();
 					}
+					
 				}
 			}
 		}
@@ -135,10 +135,11 @@ function draw(){
 	drawScore();
 	drawLives();
 	collisionDetection();
-	if(y+dy<ballRadius){
+	if(y+dy<=ballRadius){
 	dy=-dy;
-	}else if(y+dy>canvas.height-ballRadius){
-	if(x>paddleX&&x<paddleX+paddleWidth){
+	}else if(y+dy>=canvas.height-ballRadius){
+	if(x>=paddleX&&x<=paddleX+paddleWidth){
+	 ChangeBallColor=(ChangeBallColor+1)%brickColumnCount;
 	dy=-dy;
 	}else {
 	    lives--;
